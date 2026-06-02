@@ -1,0 +1,84 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 64px;
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+  box-shadow: 0 2px 12px rgba(90, 172, 237, 0.10);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heart {
+  font-size: 1.4rem;
+  color: var(--pink);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.25); }
+}
+
+.brandName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  letter-spacing: 0.5px;
+}
+
+.links {
+  display: flex;
+  gap: 4px;
+}
+
+.link {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.link:hover {
+  color: var(--pink);
+  background: var(--pink-light);
+}
+
+.active {
+  color: var(--pink);
+  background: var(--pink-light);
+  border-bottom: 2px solid var(--pink);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.logoutBtn {
+  font-size: 0.85rem;
+  padding: 6px 14px;
+}
+
+@media (max-width: 600px) {
+  .nav { padding: 0 16px; }
+  .userName { display: none; }
+  .brandName { font-size: 0.95rem; }
+}

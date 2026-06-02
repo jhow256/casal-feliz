@@ -1,0 +1,80 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 440px;
+  padding: 28px 32px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+}
+
+.subtitle {
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* Stars */
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.15s, transform 0.1s;
+  padding: 0;
+  line-height: 1;
+}
+.star:hover,
+.starFilled {
+  color: #f5c518;
+  transform: scale(1.15);
+}
+
+.ratingLabel {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-left: 6px;
+  min-width: 100px;
+}
+
+.charCount {
+  font-size: 0.75rem;
+  color: var(--muted);
+  align-self: flex-end;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

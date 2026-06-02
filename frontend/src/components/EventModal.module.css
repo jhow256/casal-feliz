@@ -1,0 +1,54 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 32px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.modalHeader h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+}
+
+.charCount {
+  font-size: 0.75rem;
+  color: var(--muted);
+  align-self: flex-end;
+}
+
+.dateTimeRow {
+  display: flex;
+  gap: 12px;
+}
+
+.dateTimeRow .field {
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

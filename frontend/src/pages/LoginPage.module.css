@@ -1,0 +1,55 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dff0fb 0%, #f4f9fd 60%, #dff0fb 100%);
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(90, 172, 237, 0.18);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.heartBig {
+  font-size: 3rem;
+  color: var(--pink);
+  display: block;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.2); }
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--pink-dark);
+  margin-top: 12px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 6px;
+  font-size: 0.95rem;
+}
+
+.submitBtn {
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 8px;
+}
