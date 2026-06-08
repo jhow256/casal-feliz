@@ -17,7 +17,7 @@ export default function Navbar() {
           to="/carousel"
           className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}
         >
-          📷 Fotos
+          🏠 Início
         </NavLink>
         <NavLink
           to="/agenda"

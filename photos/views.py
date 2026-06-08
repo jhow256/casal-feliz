@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.image_utils import compress_image
 from .models import Photo
 from .serializers import PhotoSerializer, PhotoUploadSerializer
 
@@ -33,10 +34,11 @@ class PhotoListCreateView(APIView):
             return Response({"error": str(first_error)}, status=status.HTTP_400_BAD_REQUEST)
 
         file = upload_serializer.validated_data["file"]
+        compressed = compress_image(file, filename_hint=file.name)
         photo = Photo.objects.create(
             uploaded_by=request.user,
             original_filename=file.name,
-            file=file,
+            file=compressed,
         )
         serializer = PhotoSerializer(photo, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)

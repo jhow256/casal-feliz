@@ -4,9 +4,9 @@
   justify-content: space-between;
   padding: 0 32px;
   height: 64px;
-  background: #fff;
-  border-bottom: 2px solid var(--border);
-  box-shadow: 0 2px 12px rgba(90, 172, 237, 0.10);
+  background: var(--pink);
+  border-bottom: none;
+  box-shadow: 0 2px 16px rgba(90, 172, 237, 0.3);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -16,14 +16,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .heart {
   font-size: 1.4rem;
-  color: var(--pink);
+  color: #fff;
   animation: pulse 1.4s ease-in-out infinite;
 }
-
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50%       { transform: scale(1.25); }
@@ -32,53 +32,79 @@
 .brandName {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--pink-dark);
+  color: #fff;
   letter-spacing: 0.5px;
 }
 
 .links {
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
 }
 
 .link {
-  padding: 8px 18px;
+  padding: 8px 14px;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--muted);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
-
-.link:hover {
-  color: var(--pink);
-  background: var(--pink-light);
-}
-
-.active {
-  color: var(--pink);
-  background: var(--pink-light);
-  border-bottom: 2px solid var(--pink);
-}
+.link:hover    { color: #fff; background: rgba(255,255,255,0.15); }
+.active        { color: #fff; background: rgba(255,255,255,0.2); border-bottom: 2px solid #fff; }
 
 .user {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .userName {
   font-size: 0.9rem;
-  color: var(--muted);
+  color: rgba(255,255,255,0.85);
 }
 
 .logoutBtn {
   font-size: 0.85rem;
   padding: 6px 14px;
+  border-color: rgba(255,255,255,0.6) !important;
+  color: #fff !important;
 }
+.logoutBtn:hover { background: rgba(255,255,255,0.15) !important; }
 
-@media (max-width: 600px) {
+/* ── Tablet ── */
+@media (max-width: 700px) {
   .nav { padding: 0 16px; }
   .userName { display: none; }
+  .link { padding: 7px 10px; font-size: 0.82rem; }
   .brandName { font-size: 0.95rem; }
+}
+
+/* ── Mobile — links abaixo ── */
+@media (max-width: 480px) {
+  .nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px 0;
+    gap: 0;
+  }
+  .brand { padding-bottom: 10px; }
+  .user  { padding-bottom: 10px; }
+  .links {
+    order: 3;
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 0 4px;
+    gap: 0;
+    justify-content: space-around;
+  }
+  .link {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+  .brandName { font-size: 0.9rem; }
 }

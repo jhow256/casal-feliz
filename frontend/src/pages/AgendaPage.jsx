@@ -97,9 +97,19 @@ export default function AgendaPage() {
     if (ev) setCompleteTarget(ev)
   }
 
-  async function handleConfirmComplete({ rating, completion_note }) {
+  async function handleConfirmComplete({ rating, completion_note, photos }) {
     try {
       await api.post(`/api/events/${completeTarget.id}/complete/`, { rating, completion_note })
+
+      // Upload de até 3 fotos na galeria
+      for (const photo of (photos || [])) {
+        const form = new FormData()
+        form.append('photo', photo)
+        await api.post(`/api/events/${completeTarget.id}/gallery/`, form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+      }
+
       setEvents((p) => p.filter((e) => e.id !== completeTarget.id))
       setCompleteTarget(null)
       toast.success('Compromisso concluído! ✅')

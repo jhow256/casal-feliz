@@ -87,14 +87,17 @@ export default function EventViewModal({ event, onClose }) {
             </div>
           </section>
 
-          {/* ── Registros (foto) ── */}
+          {/* ── Registros (fotos) ── */}
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>Registros</h3>
 
-            {event.photo_url ? (
-              <div className={styles.photoBox}>
-                <img src={event.photo_url} alt="Registro do evento" />
-                <p className={styles.photoCaption}>Foto do acontecimento</p>
+            {event.gallery && event.gallery.length > 0 ? (
+              <div className={styles.galleryGrid}>
+                {event.gallery.map((p) => (
+                  <div key={p.id} className={styles.galleryItem}>
+                    <img src={p.file_url} alt="Registro do evento" loading="lazy" />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className={styles.noPhoto}>
@@ -104,11 +107,6 @@ export default function EventViewModal({ event, onClose }) {
                   <polyline points="21 15 16 10 5 21"/>
                 </svg>
                 <p>Nenhuma foto registrada para este compromisso.</p>
-                {isCompleted && (
-                  <span className={styles.noPhotoHint}>
-                    Use o botão 📷 na tabela de concluídas para adicionar uma foto.
-                  </span>
-                )}
               </div>
             )}
           </section>

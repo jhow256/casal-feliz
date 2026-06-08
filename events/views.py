@@ -7,8 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Event
-from .serializers import EventSerializer
+from core.image_utils import compress_image
+from .models import Event, EventPhoto
+from .serializers import EventSerializer, EventPhotoSerializer
 
 PAGE_SIZE = 10
 
@@ -48,6 +49,11 @@ class EventListCreateView(APIView):
                 "total_pages": total_pages,
                 "total": total,
             })
+
+        # Filter by date if provided (for calendar day view)
+        date_filter = request.query_params.get("date")
+        if date_filter:
+            qs = qs.filter(date=date_filter)
 
         serializer = EventSerializer(qs, many=True, context={"request": request})
         return Response(serializer.data)
@@ -187,7 +193,7 @@ class EventPhotoView(APIView):
         # Remove old file if exists
         if event.photo and os.path.isfile(event.photo.path):
             os.remove(event.photo.path)
-        event.photo = photo
+        event.photo = compress_image(photo, filename_hint=photo.name)
         event.save()
         return Response(EventSerializer(event, context={"request": request}).data)
 
@@ -203,3 +209,71 @@ class EventPhotoView(APIView):
         event.photo = None
         event.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventGalleryView(APIView):
+    """
+    POST   /api/events/<pk>/gallery/        — add a photo (max 3)
+    DELETE /api/events/<pk>/gallery/<gid>/  — remove a specific photo
+    """
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        if event.created_by != request.user:
+            return Response({"error": "Sem permissão."}, status=status.HTTP_403_FORBIDDEN)
+
+        if event.gallery.count() >= 3:
+            return Response(
+                {"error": "Limite de 3 fotos por evento atingido."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        photo = request.FILES.get("photo")
+        if not photo:
+            return Response({"error": "Nenhum arquivo enviado."}, status=status.HTTP_400_BAD_REQUEST)
+
+        allowed = {"image/jpeg", "image/png", "image/webp"}
+        if photo.content_type not in allowed:
+            return Response(
+                {"error": "Formato não suportado. Use JPEG, PNG ou WebP."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        ep = EventPhoto.objects.create(event=event, file=compress_image(photo, filename_hint=photo.name))
+        return Response(
+            EventPhotoSerializer(ep, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def delete(self, request, pk, gid):
+        event = get_object_or_404(Event, pk=pk)
+        if event.created_by != request.user:
+            return Response({"error": "Sem permissão."}, status=status.HTTP_403_FORBIDDEN)
+
+        ep = get_object_or_404(EventPhoto, pk=gid, event=event)
+        if ep.file and os.path.isfile(ep.file.path):
+            os.remove(ep.file.path)
+        ep.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventDatesView(APIView):
+    """
+    GET /api/events/dates/?year=2024&month=6
+    Returns list of dates that have events (any status).
+    Used by the calendar to mark active days.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        qs = Event.objects.all()
+        year  = request.query_params.get("year")
+        month = request.query_params.get("month")
+        if year:
+            qs = qs.filter(date__year=year)
+        if month:
+            qs = qs.filter(date__month=month)
+        dates = list(qs.values_list("date", flat=True).distinct())
+        return Response([str(d) for d in dates])

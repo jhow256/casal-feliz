@@ -1,10 +1,25 @@
 from rest_framework import serializers
-from .models import Event
+from .models import Event, EventPhoto
+
+
+class EventPhotoSerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EventPhoto
+        fields = ["id", "file_url", "uploaded_at"]
+
+    def get_file_url(self, obj):
+        request = self.context.get("request")
+        if obj.file:
+            return request.build_absolute_uri(obj.file.url) if request else obj.file.url
+        return None
 
 
 class EventSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
-    photo_url = serializers.SerializerMethodField()
+    photo_url       = serializers.SerializerMethodField()
+    gallery         = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -19,6 +34,7 @@ class EventSerializer(serializers.ModelSerializer):
             "rating",
             "completion_note",
             "photo_url",
+            "gallery",
             "created_at",
             "updated_at",
             "created_by",
@@ -27,7 +43,8 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id", "created_at", "updated_at",
             "created_by", "created_by_name",
-            "is_completed", "completed_at", "photo_url",
+            "is_completed", "completed_at",
+            "photo_url", "gallery",
             "rating", "completion_note",
         ]
 
@@ -39,6 +56,12 @@ class EventSerializer(serializers.ModelSerializer):
         if obj.photo:
             return request.build_absolute_uri(obj.photo.url) if request else obj.photo.url
         return None
+
+    def get_gallery(self, obj):
+        request = self.context.get("request")
+        return EventPhotoSerializer(
+            obj.gallery.all(), many=True, context={"request": request}
+        ).data
 
     def validate_title(self, value):
         if not value.strip():
