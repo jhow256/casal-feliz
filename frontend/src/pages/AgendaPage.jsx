@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
@@ -6,6 +7,7 @@ import EventCard from '../components/EventCard'
 import EventModal from '../components/EventModal'
 import EventViewModal from '../components/EventViewModal'
 import CompleteModal from '../components/CompleteModal'
+import { SkeletonCard } from '../components/Skeleton'
 import styles from './AgendaPage.module.css'
 
 const MONTHS = [
@@ -134,7 +136,13 @@ export default function AgendaPage() {
     }
   }
 
-  if (loading) return <div className="spinner" style={{ marginTop: 80 }} />
+  if (loading) return (
+    <div className="page-container">
+      <div className={styles.skeletonGrid}>
+        {[1,2,3,4,5,6].map(i => <SkeletonCard key={i} />)}
+      </div>
+    </div>
+  )
 
   return (
     <div className="page-container">
@@ -220,21 +228,28 @@ export default function AgendaPage() {
 
       {/* ── Cards grid ── */}
       {!error && filtered.length > 0 && (
-        <div className={styles.grid}>
-          {filtered.map((ev) => (
-            <EventCard
-              key={ev.id}
-              event={ev}
-              isOwner={ev.created_by === user?.id}
-              onView={setViewModal}
-              onEdit={setEditModal}
-              onDelete={handleDelete}
-              onDuplicate={handleDuplicate}
-              onComplete={handleComplete}
-              onPhotoUpload={handlePhotoUpload}
-            />
-          ))}
-        </div>
+        <motion.div
+          className={styles.grid}
+          initial="hidden"
+          animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
+        >
+          <AnimatePresence mode="popLayout">
+            {filtered.map((ev) => (
+              <EventCard
+                key={ev.id}
+                event={ev}
+                isOwner={ev.created_by === user?.id}
+                onView={setViewModal}
+                onEdit={setEditModal}
+                onDelete={handleDelete}
+                onDuplicate={handleDuplicate}
+                onComplete={handleComplete}
+                onPhotoUpload={handlePhotoUpload}
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
       )}
 
       {editModal !== null && (

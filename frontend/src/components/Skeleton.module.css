@@ -1,0 +1,52 @@
+.line { border-radius: 6px; }
+
+.card {
+  background: var(--surface);
+  backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 0 0 14px;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+}
+
+.badge { width: 64px; height: 22px; border-radius: 999px; }
+.date  { width: 80px; height: 18px; border-radius: 6px; }
+
+.cardBody {
+  padding: 6px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardFooter {
+  display: flex;
+  gap: 8px;
+  padding: 14px 16px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+
+.btn { flex: 1; height: 32px; border-radius: 8px; }
+
+.table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.tableRow:last-child { border-bottom: none; }

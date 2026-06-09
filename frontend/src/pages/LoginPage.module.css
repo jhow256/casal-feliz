@@ -3,57 +3,74 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #dff0fb 0%, #f4f9fd 60%, #dff0fb 100%);
+  background: var(--bg);
+  background-image: var(--grad-mesh);
   padding: 20px;
 }
 
 .card {
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 40px rgba(90, 172, 237, 0.18);
-  padding: 48px 40px;
+  background: var(--surface);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(28px, 5vw, 52px) clamp(24px, 4vw, 44px);
   width: 100%;
   max-width: 420px;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 36px;
-}
+.header { text-align: center; margin-bottom: 32px; }
 
 .heartBig {
-  font-size: 3rem;
-  color: var(--pink);
-  display: block;
-  animation: pulse 1.4s ease-in-out infinite;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 6px 18px rgba(90,172,237,0.45));
 }
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.2); }
+  50%       { transform: scale(1.1); }
 }
 
 .title {
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 3vw + 0.8rem, 1.9rem);
   font-weight: 800;
-  color: var(--pink-dark);
-  margin-top: 12px;
+  color: var(--blue-dark);
+  letter-spacing: -0.03em;
+  margin-top: 8px;
 }
 
-.subtitle {
-  color: var(--muted);
-  margin-top: 6px;
-  font-size: 0.95rem;
-}
+.subtitle { color: var(--muted); margin-top: 6px; font-size: 0.95rem; }
 
 .submitBtn {
   width: 100%;
   justify-content: center;
-  padding: 12px;
+  padding: 13px;
   font-size: 1rem;
   margin-top: 8px;
+  border-radius: var(--radius-full) !important;
 }
 
-@media (max-width: 480px) {
-  .card { padding: 32px 20px; }
-  .title { font-size: 1.5rem; }
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
+.passwordWrapper input { padding-right: 44px; }
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color var(--transition);
+}
+.eyeBtn:hover { color: var(--blue); }

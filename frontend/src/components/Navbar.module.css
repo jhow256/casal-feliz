@@ -2,109 +2,93 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
-  height: 64px;
-  background: var(--pink);
-  border-bottom: none;
-  box-shadow: 0 2px 16px rgba(90, 172, 237, 0.3);
+  padding: 0 28px;
+  height: 62px;
+  background: linear-gradient(135deg, rgba(90,172,237,0.92) 0%, rgba(42,123,191,0.95) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 24px rgba(42,123,191,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
+/* Brand */
+.brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.heartBadge { display: flex; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+.brandName  { font-size: clamp(0.9rem, 1vw + 0.5rem, 1.05rem); font-weight: 800; color: #fff; letter-spacing: -0.01em; }
 
-.heart {
-  font-size: 1.4rem;
-  color: #fff;
-  animation: pulse 1.4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.25); }
-}
-
-.brandName {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.5px;
-}
-
-.links {
-  display: flex;
-  gap: 2px;
-  flex: 1;
-  justify-content: center;
-}
+/* Links */
+.links { display: flex; gap: 2px; flex: 1; justify-content: center; }
 
 .link {
-  padding: 8px 14px;
-  border-radius: 8px;
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 999px;
   font-weight: 600;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  font-size: clamp(0.78rem, 0.8vw + 0.5rem, 0.9rem);
+  color: rgba(255,255,255,0.82);
+  transition: color 0.2s ease, background 0.2s ease;
 }
-.link:hover    { color: #fff; background: rgba(255,255,255,0.15); }
-.active        { color: #fff; background: rgba(255,255,255,0.2); border-bottom: 2px solid #fff; }
+.link:hover { color: #fff; background: rgba(255,255,255,0.15); }
+.active { color: #fff; background: rgba(255,255,255,0.22); }
 
-.user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+.activeIndicator {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 99px;
 }
 
-.userName {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.85);
-}
+/* User area */
+.user { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.userName { font-size: 0.85rem; color: rgba(255,255,255,0.88); white-space: nowrap; }
 
 .logoutBtn {
-  font-size: 0.85rem;
-  padding: 6px 14px;
-  border-color: rgba(255,255,255,0.6) !important;
+  font-size: 0.82rem !important;
+  padding: 6px 14px !important;
+  border-color: rgba(255,255,255,0.55) !important;
   color: #fff !important;
+  background: rgba(255,255,255,0.12) !important;
+  border-radius: 999px !important;
 }
-.logoutBtn:hover { background: rgba(255,255,255,0.15) !important; }
 
-/* ── Tablet ── */
+/* Dark mode toggle */
+.themeBtn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.themeBtn:hover { background: rgba(255,255,255,0.28); }
+
+/* Tablet */
 @media (max-width: 700px) {
   .nav { padding: 0 16px; }
   .userName { display: none; }
-  .link { padding: 7px 10px; font-size: 0.82rem; }
-  .brandName { font-size: 0.95rem; }
+  .link { padding: 7px 10px; font-size: 0.78rem; }
+  .brandName { font-size: 0.88rem; }
 }
 
-/* ── Mobile — links abaixo ── */
+/* Mobile */
 @media (max-width: 480px) {
-  .nav {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 10px 16px 0;
-    gap: 0;
-  }
-  .brand { padding-bottom: 10px; }
-  .user  { padding-bottom: 10px; }
+  .nav { flex-wrap: wrap; height: auto; padding: 10px 14px 0; }
+  .brand { padding-bottom: 8px; }
+  .user  { padding-bottom: 8px; }
   .links {
-    order: 3;
-    width: 100%;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    padding: 6px 0 4px;
-    gap: 0;
+    order: 3; width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    padding: 6px 0 4px; gap: 0;
     justify-content: space-around;
   }
-  .link {
-    padding: 6px 8px;
-    font-size: 0.75rem;
-    border-radius: 6px;
-  }
-  .brandName { font-size: 0.9rem; }
+  .link { padding: 6px 8px; font-size: 0.72rem; }
 }

@@ -10,6 +10,10 @@ def event_gallery_path(instance, filename):
     return f"events/{instance.event_id}/gallery/{filename}"
 
 
+def event_video_path(instance, filename):
+    return f"events/{instance.event_id}/videos/{filename}"
+
+
 class Event(models.Model):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="events"
@@ -39,6 +43,18 @@ class EventPhoto(models.Model):
         Event, on_delete=models.CASCADE, related_name="gallery"
     )
     file = models.ImageField(upload_to=event_gallery_path)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["uploaded_at"]
+
+
+class EventVideo(models.Model):
+    """Up to 2 videos per event."""
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="videos"
+    )
+    file = models.FileField(upload_to=event_video_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.image_utils import compress_image
-from .models import Event, EventPhoto
-from .serializers import EventSerializer, EventPhotoSerializer
+from .models import Event, EventPhoto, EventVideo
+from .serializers import EventSerializer, EventPhotoSerializer, EventVideoSerializer
 
 PAGE_SIZE = 10
 
@@ -256,6 +256,62 @@ class EventGalleryView(APIView):
         if ep.file and os.path.isfile(ep.file.path):
             os.remove(ep.file.path)
         ep.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventVideoView(APIView):
+    """
+    POST   /api/events/<pk>/videos/        — add a video (max 2)
+    DELETE /api/events/<pk>/videos/<vid>/  — remove a specific video
+    """
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    ALLOWED_TYPES = {"video/mp4", "video/quicktime", "video/webm", "video/x-msvideo"}
+    MAX_SIZE = 100 * 1024 * 1024  # 100 MB
+
+    def post(self, request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        if event.created_by != request.user:
+            return Response({"error": "Sem permissão."}, status=status.HTTP_403_FORBIDDEN)
+
+        if event.videos.count() >= 2:
+            return Response(
+                {"error": "Limite de 2 vídeos por evento atingido."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        video = request.FILES.get("video")
+        if not video:
+            return Response({"error": "Nenhum arquivo enviado."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if video.content_type not in self.ALLOWED_TYPES:
+            return Response(
+                {"error": "Formato não suportado. Use MP4, MOV, WebM ou AVI."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if video.size > self.MAX_SIZE:
+            return Response(
+                {"error": "Vídeo excede o limite de 100 MB."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        ev = EventVideo.objects.create(event=event, file=video)
+        return Response(
+            EventVideoSerializer(ev, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def delete(self, request, pk, vid):
+        event = get_object_or_404(Event, pk=pk)
+        if event.created_by != request.user:
+            return Response({"error": "Sem permissão."}, status=status.HTTP_403_FORBIDDEN)
+
+        ev = get_object_or_404(EventVideo, pk=vid, event=event)
+        if ev.file and os.path.isfile(ev.file.path):
+            os.remove(ev.file.path)
+        ev.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

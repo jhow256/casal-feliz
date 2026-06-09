@@ -6,6 +6,7 @@ from .views import (
     EventDuplicateView,
     EventPhotoView,
     EventGalleryView,
+    EventVideoView,
     EventDatesView,
 )
 
@@ -18,4 +19,6 @@ urlpatterns = [
     path("<int:pk>/photo/", EventPhotoView.as_view(), name="event-photo"),
     path("<int:pk>/gallery/", EventGalleryView.as_view(), name="event-gallery-add"),
     path("<int:pk>/gallery/<int:gid>/", EventGalleryView.as_view(), name="event-gallery-delete"),
+    path("<int:pk>/videos/", EventVideoView.as_view(), name="event-video-add"),
+    path("<int:pk>/videos/<int:vid>/", EventVideoView.as_view(), name="event-video-delete"),
 ]

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import styles from './LoveCalendar.module.css'
 
@@ -33,12 +34,18 @@ function DayModal({ dateStr, onClose }) {
   }, [dateStr])
 
   return (
-    <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className={styles.dayModal}>
-        <div className={styles.dayHeader}>
-          <h3>{fmtDateLong(dateStr)}</h3>
-          <button className="btn btn-ghost" onClick={onClose}>✕</button>
-        </div>
+    <AnimatePresence>
+      <motion.div className={styles.overlay}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        onClick={(e) => e.target === e.currentTarget && onClose()}>
+        <motion.div className={styles.dayModal}
+          initial={{ opacity: 0, scale: 0.92, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 320, damping: 28 } }}
+          exit={{ opacity: 0, scale: 0.94, y: 16, transition: { duration: 0.18 } }}>
+          <div className={styles.dayHeader}>
+            <h3>{fmtDateLong(dateStr)}</h3>
+            <button className="btn btn-ghost" onClick={onClose}>✕</button>
+          </div>
 
         {loading && <div className="spinner" style={{ margin: '32px auto' }} />}
 
@@ -98,10 +105,12 @@ function DayModal({ dateStr, onClose }) {
         )}
 
         <div className={styles.dayFooter}>
-          <button className="btn btn-primary" onClick={onClose}>Fechar</button>
+          <motion.button className="btn btn-primary" onClick={onClose}
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>Fechar</motion.button>
         </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
@@ -160,11 +169,11 @@ export default function LoveCalendar() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.calHeader}>
-        <button className={styles.navBtn} onClick={prevMonth} disabled={atStart}>‹</button>
-        <span className={styles.monthLabel}>
-          {MONTHS_PT[viewMonth]} {viewYear}
-        </span>
-        <button className={styles.navBtn} onClick={nextMonth} disabled={atEnd}>›</button>
+        <motion.button className={styles.navBtn} onClick={prevMonth} disabled={atStart}
+          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>‹</motion.button>
+        <span className={styles.monthLabel}>{MONTHS_PT[viewMonth]} {viewYear}</span>
+        <motion.button className={styles.navBtn} onClick={nextMonth} disabled={atEnd}
+          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>›</motion.button>
       </div>
 
       {/* Day names */}
@@ -182,19 +191,17 @@ export default function LoveCalendar() {
           const isSelected = selectedDate === dateStr
 
           return (
-            <button
+            <motion.button
               key={dateStr}
-              className={`
-                ${styles.day}
-                ${isToday    ? styles.dayToday    : ''}
-                ${hasEvent   ? styles.dayHasEvent : ''}
-                ${isSelected ? styles.daySelected : ''}
-              `}
+              className={`${styles.day} ${isToday?styles.dayToday:''} ${hasEvent?styles.dayHasEvent:''} ${isSelected?styles.daySelected:''}`}
               onClick={() => handleDayClick(day)}
+              whileHover={{ scale: 1.12 }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
               {day}
               {hasEvent && <span className={styles.dot} />}
-            </button>
+            </motion.button>
           )
         })}
       </div>

@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { motion } from 'framer-motion'
 import api from '../services/api'
 import toast from 'react-hot-toast'
 import EventViewModal from '../components/EventViewModal'
+import { SkeletonTable } from '../components/Skeleton'
 import styles from './CompletedPage.module.css'
 
 const MONTHS = [
@@ -129,7 +131,11 @@ export default function CompletedPage() {
     }
   }
 
-  if (loading) return <div className="spinner" style={{ marginTop: 80 }} />
+  if (loading) return (
+    <div className="page-container">
+      <SkeletonTable rows={8} />
+    </div>
+  )
 
   return (
     <div className="page-container">
@@ -202,8 +208,12 @@ export default function CompletedPage() {
                 </tr>
               </thead>
               <tbody>
-                {events.map((ev) => (
-                  <tr key={ev.id}>
+                {events.map((ev, idx) => (
+                  <motion.tr key={ev.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.04, duration: 0.25 }}>
+
                     <td>
                       <div className={styles.cellTitle}>{ev.title}</div>
                       {ev.completion_note && (
@@ -241,7 +251,7 @@ export default function CompletedPage() {
 
                       </div>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>

@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { motion } from 'framer-motion'
 import api from '../services/api'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import LoveTimer from '../components/LoveTimer'
 import LoveCalendar from '../components/LoveCalendar'
+import { SkeletonLine } from '../components/Skeleton'
 import styles from './CarouselPage.module.css'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -87,7 +89,16 @@ export default function CarouselPage() {
     }
   }
 
-  if (loading) return <div className="spinner" style={{ marginTop: 80 }} />
+  if (loading) return (
+    <div className="page-container">
+      <div style={{ display:'flex', flexDirection:'column', gap:16, alignItems:'center' }}>
+        <div className="skeleton" style={{ width:'100%', maxWidth:720, aspectRatio:'16/9', borderRadius:'var(--radius-lg)' }} />
+        <div style={{ display:'flex', gap:10 }}>
+          {[1,2,3,4].map(i => <div key={i} className="skeleton" style={{ width:72, height:54, borderRadius:'var(--radius-sm)' }} />)}
+        </div>
+      </div>
+    </div>
+  )
 
   return (
     <div className="page-container">

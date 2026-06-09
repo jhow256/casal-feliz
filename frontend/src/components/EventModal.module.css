@@ -1,42 +1,39 @@
 .overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 16px;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; padding: 16px;
 }
 
 .modal {
   background: var(--surface);
-  border-radius: 16px;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 480px;
-  padding: 24px 28px;
-  max-height: 95vh;
-  overflow-y: auto;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.15);
+  width: 100%; max-width: 480px;
+  padding: clamp(20px, 3vw, 28px) clamp(18px, 3vw, 30px);
+  max-height: 95vh; overflow-y: auto;
 }
 
 .modalHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 24px;
 }
-.modalHeader h2 { font-size: 1.2rem; font-weight: 700; color: var(--pink-dark); }
+.modalHeader h2 { font-size: 1.15rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
 
-.charCount { font-size: 0.75rem; color: var(--muted); align-self: flex-end; }
+.charCount { font-size: 0.72rem; color: var(--muted); align-self: flex-end; }
 
 .dateTimeRow { display: flex; gap: 12px; flex-wrap: wrap; }
 .dateTimeRow .field { flex: 1; min-width: 120px; margin-bottom: 16px; }
 
-.actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
 
 @media (max-width: 480px) {
-  .modal { padding: 20px 16px; }
+  .modal { padding: 18px 16px; }
   .dateTimeRow { flex-direction: column; gap: 0; }
   .actions { flex-direction: column-reverse; }
   .actions .btn { width: 100%; justify-content: center; }

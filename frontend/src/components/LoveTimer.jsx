@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import styles from './LoveTimer.module.css'
 
 const START_DATE = new Date('2024-08-01T00:00:00')
@@ -51,27 +52,33 @@ export default function LoveTimer() {
   }, [])
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.hearts}>♥ ♥ ♥</div>
+    <motion.div className={styles.wrapper}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}>
+      <motion.div className={styles.hearts}
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}>
+        ♥ ♥ ♥
+      </motion.div>
       <h2 className={styles.title}>O relógio que conta o início da nossa história</h2>
       <p className={styles.subtitle}>
         Juntos desde <strong>01 de agosto de 2024</strong> — já são{' '}
         <strong>{time.totalDays} dias</strong> de amor 💕
       </p>
-
       <div className={styles.clock}>
-        <Pad label="anos"    value={time.years}   />
+        <Pad label="anos"  value={time.years}   />
         <span className={styles.sep}>:</span>
-        <Pad label="meses"   value={time.months}  />
+        <Pad label="meses" value={time.months}  />
         <span className={styles.sep}>:</span>
-        <Pad label="dias"    value={time.days}     />
+        <Pad label="dias"  value={time.days}    />
         <span className={styles.sep}>:</span>
-        <Pad label="horas"   value={time.hours}    />
+        <Pad label="horas" value={time.hours}   />
         <span className={styles.sep}>:</span>
-        <Pad label="min"     value={time.minutes}  />
+        <Pad label="min"   value={time.minutes} />
         <span className={styles.sep}>:</span>
-        <Pad label="seg"     value={time.seconds}  />
+        <Pad label="seg"   value={time.seconds} />
       </div>
-    </div>
+    </motion.div>
   )
 }

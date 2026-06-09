@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Event, EventPhoto
+from .models import Event, EventPhoto, EventVideo
 
 
 class EventPhotoSerializer(serializers.ModelSerializer):
@@ -16,10 +16,25 @@ class EventPhotoSerializer(serializers.ModelSerializer):
         return None
 
 
+class EventVideoSerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EventVideo
+        fields = ["id", "file_url", "uploaded_at"]
+
+    def get_file_url(self, obj):
+        request = self.context.get("request")
+        if obj.file:
+            return request.build_absolute_uri(obj.file.url) if request else obj.file.url
+        return None
+
+
 class EventSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
     photo_url       = serializers.SerializerMethodField()
     gallery         = serializers.SerializerMethodField()
+    videos          = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -35,6 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
             "completion_note",
             "photo_url",
             "gallery",
+            "videos",
             "created_at",
             "updated_at",
             "created_by",
@@ -44,7 +60,7 @@ class EventSerializer(serializers.ModelSerializer):
             "id", "created_at", "updated_at",
             "created_by", "created_by_name",
             "is_completed", "completed_at",
-            "photo_url", "gallery",
+            "photo_url", "gallery", "videos",
             "rating", "completion_note",
         ]
 
@@ -61,6 +77,12 @@ class EventSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         return EventPhotoSerializer(
             obj.gallery.all(), many=True, context={"request": request}
+        ).data
+
+    def get_videos(self, obj):
+        request = self.context.get("request")
+        return EventVideoSerializer(
+            obj.videos.all(), many=True, context={"request": request}
         ).data
 
     def validate_title(self, value):

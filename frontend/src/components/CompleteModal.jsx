@@ -1,5 +1,13 @@
 import { useState, useRef } from 'react'
+import { motion } from 'framer-motion'
 import styles from './CompleteModal.module.css'
+
+const overlayV = { hidden:{opacity:0}, show:{opacity:1}, exit:{opacity:0} }
+const modalV   = {
+  hidden: { opacity:0, scale:0.92, y:24 },
+  show:   { opacity:1, scale:1, y:0, transition:{type:'spring',stiffness:320,damping:28} },
+  exit:   { opacity:0, scale:0.94, y:16, transition:{duration:0.18} },
+}
 
 const MAX_PHOTOS = 3
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp']
@@ -46,8 +54,9 @@ export default function CompleteModal({ eventTitle, onConfirm, onClose }) {
   }
 
   return (
-    <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className={styles.modal} role="dialog" aria-modal="true">
+    <motion.div className={styles.overlay} variants={overlayV} initial="hidden" animate="show" exit="exit"
+      onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <motion.div className={styles.modal} variants={modalV} role="dialog" aria-modal="true">
 
         <div className={styles.header}>
           <h2>Concluir compromisso</h2>
@@ -143,18 +152,17 @@ export default function CompleteModal({ eventTitle, onConfirm, onClose }) {
             />
           </div>
 
-          {/* ── Ações ── */}
           <div className={styles.actions}>
-            <button type="button" className="btn btn-outline" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={saving}>
+            <motion.button type="button" className="btn btn-outline" onClick={onClose}
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>Cancelar</motion.button>
+            <motion.button type="submit" className="btn btn-primary" disabled={saving}
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
               {saving ? 'Salvando...' : '✅ Concluir'}
-            </button>
+            </motion.button>
           </div>
 
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
