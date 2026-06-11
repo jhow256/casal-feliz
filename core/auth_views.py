@@ -100,3 +100,21 @@ class MeView(APIView):
                 "name": user.get_full_name() or user.username,
             }
         )
+
+
+class UsersView(APIView):
+    """
+    GET /api/auth/users/
+    Returns all users — used to find the partner's name.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        from django.contrib.auth.models import User
+        users = User.objects.filter(is_active=True).values("id", "username", "first_name", "last_name")
+        result = []
+        for u in users:
+            name = f"{u['first_name']} {u['last_name']}".strip() or u["username"]
+            result.append({"id": u["id"], "username": u["username"], "name": name})
+        return Response(result)

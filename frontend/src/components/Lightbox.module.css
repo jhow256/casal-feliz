@@ -1,0 +1,138 @@
+/* ── Grid overlay ─────────────────────────────────────── */
+.gridOverlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(5,10,20,0.94);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+.gridHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  flex-shrink: 0;
+}
+.gridTitle { font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
+
+.gridBody { flex: 1; overflow-y: auto; padding: 8px 16px 24px; }
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 6px;
+}
+
+.gridItem {
+  aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  border: none; padding: 0; background: rgba(255,255,255,0.06);
+  cursor: pointer; position: relative; display: block;
+}
+.gridItem img {
+  width: 100%; height: 100%;
+  object-fit: cover; /* cover para grade — quadrados preenchidos */
+  display: block; transition: transform 0.3s ease;
+}
+.gridItem:hover img { transform: scale(1.05); }
+
+.gridItemOverlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.gridItem:hover .gridItemOverlay { opacity: 1; }
+
+/* ── Full viewer ──────────────────────────────────────── */
+.viewerOverlay {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(5,10,20,0.97);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: space-between;
+}
+
+.topBar {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  flex-shrink: 0; z-index: 2;
+}
+.counter      { font-size: 0.88rem; font-weight: 700; color: rgba(255,255,255,0.7); }
+.uploaderName { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+.topActions   { display: flex; gap: 8px; }
+
+.deleteBtn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(229,62,62,0.25); border: 1px solid rgba(229,62,62,0.4);
+  color: #fc8181; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.deleteBtn:hover { background: rgba(229,62,62,0.5); }
+
+.closeBtn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.closeBtn:hover { background: rgba(255,255,255,0.22); }
+
+.imageArea {
+  flex: 1; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; min-height: 0;
+}
+.imgWrap {
+  max-width: min(92vw, 1100px);
+  max-height: calc(100vh - 140px);
+  display: flex; align-items: center; justify-content: center;
+}
+.mainImg {
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  user-select: none;
+  display: block;
+}
+
+.navBtn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.8rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 3;
+}
+.navBtn:disabled { opacity: 0.2; cursor: default; }
+.prev { left: 16px; } .next { right: 16px; }
+
+.strip {
+  width: 100%; display: flex; gap: 6px;
+  padding: 12px 16px 16px; overflow-x: auto; flex-shrink: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  justify-content: center; flex-wrap: nowrap;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+.thumb {
+  width: 60px; height: 45px; flex-shrink: 0;
+  border-radius: 8px; overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer; padding: 0; background: none; opacity: 0.55;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb:hover { opacity: 0.85; }
+.thumbActive { border-color: #fff; opacity: 1; }
+
+@media (max-width: 480px) {
+  .photoGrid { grid-template-columns: repeat(3, 1fr); }
+  .navBtn { width: 38px; height: 38px; font-size: 1.4rem; }
+  .prev { left: 8px; } .next { right: 8px; }
+}

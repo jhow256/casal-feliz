@@ -71,6 +71,7 @@ export default function Navbar() {
           { to: '/carousel',   label: '🏠 Início' },
           { to: '/agenda',     label: '📅 Agenda' },
           { to: '/concluidas', label: '✅ Concluídas' },
+          { to: '/mensagens',  label: '💌 Mensagens' },
         ].map(({ to, label }) => (
           <NavLink
             key={to}

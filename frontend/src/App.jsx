@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import CarouselPage from './pages/CarouselPage'
 import AgendaPage from './pages/AgendaPage'
 import CompletedPage from './pages/CompletedPage'
+import MessagesPage from './pages/MessagesPage'
 
 const pageVariants = {
   initial: { opacity: 0, y: 16, filter: 'blur(4px)' },
@@ -42,6 +43,7 @@ function AnimatedRoutes() {
             <Route path="/carousel"   element={<AnimatedPage><CarouselPage /></AnimatedPage>} />
             <Route path="/agenda"     element={<AnimatedPage><AgendaPage /></AnimatedPage>} />
             <Route path="/concluidas" element={<AnimatedPage><CompletedPage /></AnimatedPage>} />
+            <Route path="/mensagens"  element={<AnimatedPage><MessagesPage /></AnimatedPage>} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

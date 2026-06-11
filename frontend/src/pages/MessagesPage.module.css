@@ -1,0 +1,108 @@
+.header { margin-bottom: 28px; }
+.title  { font-size: clamp(1.2rem,2vw+0.8rem,1.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
+.subtitle { font-size: 0.88rem; color: var(--muted); margin-top: 4px; }
+
+/* Compose */
+.compose {
+  background: var(--surface);
+  backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
+}
+
+.textarea {
+  width: 100%; resize: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-solid);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.95rem; line-height: 1.6;
+  color: var(--text); font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(90,172,237,0.15); }
+.textarea::placeholder { color: var(--muted); }
+
+.composeFooter { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.charCount { font-size: 0.75rem; color: var(--muted); }
+
+/* Skeleton */
+.skeletonList { display: flex; flex-direction: column; gap: 12px; }
+
+/* Empty */
+.empty {
+  text-align: center; padding: 56px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  color: var(--muted); font-size: 2.5rem;
+}
+.empty p { font-size: 0.95rem; }
+
+/* Message list */
+.list { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--surface);
+  backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.card:hover { box-shadow: var(--shadow); }
+.revealed { border-color: rgba(39,103,73,0.3); background: rgba(39,103,73,0.04); }
+
+/* Locked card — recipient hasn't revealed yet */
+.locked { border-color: rgba(90,172,237,0.35); background: rgba(90,172,237,0.04); }
+
+.lockedBox {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 16px 12px; text-align: center;
+}
+.lockIcon { font-size: 1.8rem; }
+.lockedHint { font-size: 0.85rem; color: var(--muted); }
+
+/* Scratch portal modal */
+.scratchOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.scratchModal {
+  background: var(--surface);
+  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.12);
+  width: 100%; max-width: 520px;
+  padding: 24px 24px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.scratchHeader { display: flex; align-items: center; justify-content: space-between; }
+.scratchHeader h3 { font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.scratchHint { font-size: 0.85rem; color: var(--muted); text-align: center; }
+.scratchWrap { width: 100%; display: flex; justify-content: center; }
+.scratchFrom { font-size: 0.82rem; color: var(--muted); font-style: italic; text-align: right; }
+
+.cardTop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+.author  { font-size: 0.82rem; font-weight: 700; color: var(--blue-dark); }
+.date    { font-size: 0.75rem; color: var(--muted); }
+
+.content { font-size: 0.95rem; color: var(--text); line-height: 1.65; white-space: pre-wrap; }
+
+.cardBottom { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.revealedBadge { font-size: 0.75rem; font-weight: 700; color: #276749; background: rgba(39,103,73,0.1); padding: 3px 10px; border-radius: 999px; }
+.pendingBadge  { font-size: 0.75rem; font-weight: 700; color: var(--muted); background: rgba(0,0,0,0.06); padding: 3px 10px; border-radius: 999px; }
+
+.deleteBtn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(229,62,62,0.1); border: 1px solid rgba(229,62,62,0.25);
+  color: #e53e3e; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition);
+}
+.deleteBtn:hover { background: rgba(229,62,62,0.2); }

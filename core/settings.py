@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # local
     "photos",
     "events",
+    "messages_app",
 ]
 
 MIDDLEWARE = [
