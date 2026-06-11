@@ -1,0 +1,138 @@
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 300; padding: 20px;
+}
+
+.modal {
+  background: var(--surface);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  width: 100%; max-width: 400px;
+  padding: 36px 32px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* glow sutil no fundo */
+.modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(229, 62, 62, 0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── Ícone ── */
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.iconRing {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(229, 62, 62, 0.10);
+  border: 1.5px solid rgba(229, 62, 62, 0.28);
+  display: flex; align-items: center; justify-content: center;
+  color: #e53e3e;
+  box-shadow: 0 0 0 8px rgba(229, 62, 62, 0.06);
+}
+
+/* Pontinhos decorativos */
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(229, 62, 62, 0.5);
+}
+.dot1 { width: 6px; height: 6px; top: 2px; right: -2px; }
+.dot2 { width: 4px; height: 4px; bottom: 4px; left: -4px; opacity: 0.6; }
+.dot3 { width: 3px; height: 3px; top: 12px; left: -8px; opacity: 0.4; }
+
+/* ── Textos ── */
+.heading {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.body {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px -32px 24px;
+}
+
+/* ── Botões ── */
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: stretch;
+}
+
+.btnCancel,
+.btnDelete {
+  flex: 1;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: filter var(--transition), opacity var(--transition);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+
+.btnCancel {
+  background: var(--bg2);
+  border: 1px solid var(--border-solid);
+  color: var(--text-2);
+}
+.btnCancel:hover:not(:disabled) { filter: brightness(0.95); }
+.btnCancel:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btnDelete {
+  background: linear-gradient(135deg, #fc5c65, #e53e3e);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(229, 62, 62, 0.30);
+}
+.btnDelete:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 6px 20px rgba(229, 62, 62, 0.42); }
+.btnDelete:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .modal { padding: 28px 20px 22px; }
+  .divider { margin-left: -20px; margin-right: -20px; }
+  .actions { flex-direction: column-reverse; }
+}

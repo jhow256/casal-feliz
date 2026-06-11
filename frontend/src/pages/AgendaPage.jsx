@@ -7,6 +7,7 @@ import EventCard from '../components/EventCard'
 import EventModal from '../components/EventModal'
 import EventViewModal from '../components/EventViewModal'
 import CompleteModal from '../components/CompleteModal'
+import DeleteModal from '../components/DeleteModal'
 import { SkeletonCard } from '../components/Skeleton'
 import styles from './AgendaPage.module.css'
 
@@ -23,6 +24,8 @@ export default function AgendaPage() {
   const [editModal, setEditModal]     = useState(null)
   const [viewModal, setViewModal]     = useState(null)
   const [completeTarget, setCompleteTarget] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)   // id do evento a excluir
+  const [deleting, setDeleting]         = useState(false)
 
   // filters
   const [search, setSearch]   = useState('')
@@ -73,16 +76,23 @@ export default function AgendaPage() {
     }
   }
 
-  async function handleDelete(id) {
-    if (!window.confirm('Remover este compromisso?')) return
+  function handleDelete(id) {
+    setDeleteTarget(id)
+  }
+
+  async function confirmDelete() {
+    setDeleting(true)
     try {
-      await api.delete(`/api/events/${id}/`)
-      setEvents((p) => p.filter((e) => e.id !== id))
+      await api.delete(`/api/events/${deleteTarget}/`)
+      setEvents((p) => p.filter((e) => e.id !== deleteTarget))
       toast.success('Compromisso removido.')
+      setDeleteTarget(null)
     } catch (err) {
       toast.error(err.response?.status === 403
         ? 'Você só pode remover seus próprios compromissos.'
         : 'Erro ao remover.')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -267,6 +277,17 @@ export default function AgendaPage() {
           onClose={() => setCompleteTarget(null)}
         />
       )}
+      <AnimatePresence>
+        {deleteTarget && (
+          <DeleteModal
+            title="Remover compromisso"
+            message="Tem certeza que deseja remover este compromisso? Esta ação não pode ser desfeita."
+            loading={deleting}
+            onConfirm={confirmDelete}
+            onClose={() => setDeleteTarget(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

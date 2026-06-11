@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import toast from 'react-hot-toast'
 import EventViewModal from '../components/EventViewModal'
+import DeleteModal from '../components/DeleteModal'
 import { SkeletonTable } from '../components/Skeleton'
 import styles from './CompletedPage.module.css'
 
@@ -72,6 +73,8 @@ export default function CompletedPage() {
   const [loading, setLoading]       = useState(true)
   const [error, setError]           = useState(false)
   const [viewModal, setViewModal]   = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)  // id do evento a excluir
+  const [deleting, setDeleting]         = useState(false)
 
   // filters
   const [filterMonth, setFilterMonth]     = useState('')
@@ -108,17 +111,24 @@ export default function CompletedPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  async function handleDelete(id) {
-    if (!window.confirm('Excluir este compromisso permanentemente?')) return
+  function handleDelete(id) {
+    setDeleteTarget(id)
+  }
+
+  async function confirmDelete() {
+    setDeleting(true)
     try {
-      await api.delete(`/api/events/${id}/`)
-      setEvents(prev => prev.filter(e => e.id !== id))
+      await api.delete(`/api/events/${deleteTarget}/`)
+      setEvents(prev => prev.filter(e => e.id !== deleteTarget))
       setTotal(prev => prev - 1)
       toast.success('Compromisso excluído.')
+      setDeleteTarget(null)
     } catch (err) {
       toast.error(err.response?.status === 403
         ? 'Você só pode excluir seus próprios compromissos.'
         : 'Erro ao excluir.')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -306,6 +316,17 @@ export default function CompletedPage() {
       )}
 
       {viewModal && <EventViewModal event={viewModal} onClose={() => setViewModal(null)} />}
+      <AnimatePresence>
+        {deleteTarget && (
+          <DeleteModal
+            title="Excluir reunião concluída"
+            message="Tem certeza que deseja excluir permanentemente este registro? Esta ação não pode ser desfeita."
+            loading={deleting}
+            onConfirm={confirmDelete}
+            onClose={() => setDeleteTarget(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
