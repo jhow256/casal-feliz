@@ -59,6 +59,9 @@
 .iconView  { background: linear-gradient(135deg,var(--blue),var(--blue-dark)); border-color: var(--blue); color: #fff; }
 .iconView:hover { filter: brightness(1.1); transform: scale(1.06); }
 
+.iconDelete { color: #e53e3e; border-color: rgba(229,62,62,0.35); }
+.iconDelete:hover { background: rgba(229,62,62,0.12); border-color: #e53e3e; }
+
 /* Pagination */
 .paginationRow { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; margin-top: 28px; }
 .pagination { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; justify-content: center; }

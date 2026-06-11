@@ -108,6 +108,20 @@ export default function CompletedPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  async function handleDelete(id) {
+    if (!window.confirm('Excluir este compromisso permanentemente?')) return
+    try {
+      await api.delete(`/api/events/${id}/`)
+      setEvents(prev => prev.filter(e => e.id !== id))
+      setTotal(prev => prev - 1)
+      toast.success('Compromisso excluído.')
+    } catch (err) {
+      toast.error(err.response?.status === 403
+        ? 'Você só pode excluir seus próprios compromissos.'
+        : 'Erro ao excluir.')
+    }
+  }
+
   async function handleUndo(id) {
     try {
       await api.post(`/api/events/${id}/complete/`)
@@ -247,8 +261,20 @@ export default function CompletedPage() {
                             <circle cx="12" cy="12" r="3"/>
                           </svg>
                         </button>
-
-
+                        <motion.button
+                          className={`${styles.iconBtn} ${styles.iconDelete}`}
+                          onClick={() => handleDelete(ev.id)}
+                          title="Excluir"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14H6L5 6"/>
+                            <path d="M10 11v6"/><path d="M14 11v6"/>
+                            <path d="M9 6V4h6v2"/>
+                          </svg>
+                        </motion.button>
                       </div>
                     </td>
                   </motion.tr>
