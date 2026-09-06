@@ -109,7 +109,23 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite dev server
     "http://localhost:3000",  # CRA fallback
 ]
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True  # required for cookies to be sent cross-origin
+
+# ─── CSRF ────────────────────────────────────────────────────────────────────
+# The frontend must send the CSRF token on mutating requests (POST/PUT/DELETE).
+# WithCredentials=true in axios already ensures the cookie is forwarded;
+# djangorestframework reads it automatically via SessionAuthentication, but
+# since we use JWT we only need it if we ever add browser-session views.
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+# ─── Session / Auth cookies (HttpOnly refresh token) ─────────────────────────
+# In production set these to True and use HTTPS.
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = not DEBUG   # True in production
 
 # ─── Upload size limit (10 MB) ───────────────────────────────────────────────
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024   # 10 MB

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import api from '../services/api'
+import api, { setAccessToken, clearAccessToken } from '../services/api'
 
 const AuthContext = createContext(null)
 
@@ -7,34 +7,36 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // On mount, restore user from token
+  // On mount, attempt a silent token refresh using the HttpOnly cookie.
+  // If the cookie is still valid the backend returns a fresh access token
+  // and we can restore the session without asking the user to log in again.
   useEffect(() => {
-    const access = localStorage.getItem('access')
-    if (!access) { setLoading(false); return }
-
-    api.get('/api/auth/me/')
+    api.post('/api/auth/refresh/', {})
+      .then(({ data }) => {
+        setAccessToken(data.access)
+        return api.get('/api/auth/me/')
+      })
       .then(({ data }) => setUser(data))
       .catch(() => {
-        localStorage.removeItem('access')
-        localStorage.removeItem('refresh')
+        // No valid cookie — user needs to log in
+        clearAccessToken()
+        setUser(null)
       })
       .finally(() => setLoading(false))
   }, [])
 
   const login = useCallback(async (username, password) => {
     const { data } = await api.post('/api/auth/login/', { username, password })
-    localStorage.setItem('access', data.access)
-    localStorage.setItem('refresh', data.refresh)
+    // Access token goes into memory; refresh token is already in the HttpOnly cookie
+    setAccessToken(data.access)
     setUser(data.user)
   }, [])
 
   const logout = useCallback(async () => {
-    const refresh = localStorage.getItem('refresh')
     try {
-      if (refresh) await api.post('/api/auth/logout/', { refresh })
+      await api.post('/api/auth/logout/', {})
     } finally {
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
+      clearAccessToken()
       setUser(null)
     }
   }, [])
